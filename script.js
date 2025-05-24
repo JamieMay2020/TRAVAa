@@ -895,7 +895,7 @@ function generateShareCard() {
 
     // Update Twitter share link
     const tweetText = `Just found ${currentCoinData.name} (${currentCoinData.symbol}) on TRAVA! 🚀\n\n📈 ${currentCoinData.gain} in 24h\n💰 Volume: ${currentCoinData.volume}\n💧 Liquidity: ${currentCoinData.liquidity}\n\nTrack more daily runners at`;
-    const twitterUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent('https://trava.io')}`;
+    const twitterUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent('https://trava.fun')}`;
     const twitterBtn = document.getElementById('twitterShareBtn');
     if (twitterBtn) {
         twitterBtn.href = twitterUrl;
