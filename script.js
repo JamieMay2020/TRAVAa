@@ -23,7 +23,7 @@ const mockTrendingCoins = [
     '3d7AzmWfTWJMwAxpoxgZ4uSMmGVaaC6z2f73dP3Mpump', // POPCAT
     'b8cddvKBSj1Me9PgT7W9ps2zJymeRxzZdbdtCArpump', // BONK
     'Ak1StSUAardZ157jSQu4hMkkoPFiUowttuowUeompump', // PNUT
-    'GNYLexaKyy7GHX8wiKVCmohNcuh6fvtrFkPsbVypump'  // GOAT
+    '2PCMvFCZkkrnMLS5Xi54b589dFZNPzGyKuWucHgqpump'  // GOAT
 ];
 
 // Page navigation function
