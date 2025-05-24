@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRAVA - Daily Memecoin Runners</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="yesterday.css">
+    <link rel="stylesheet" href="roadmap.css">
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="metas.css">
+</head>
+<body>
+    <canvas id="particles"></canvas>
+
+    <header>
+        <div class="header-content">
+            <div>
+                <div class="logo">TRAVA</div>
+                <div class="tagline">Trenching + Strava = TRAVA</div>
+            </div>
+                <nav class="nav-links">
+                    <div class="internal-links">
+                        <a href="#" class="nav-link active-nav" data-page="today">Today's Runners</a>
+                        <a href="#" class="nav-link" data-page="yesterday">Yesterday's News</a>
+                        <a href="#" class="nav-link" data-page="metas">Current Metas</a>
+                        <a href="#" class="nav-link" data-page="roadmap">Coming Soon</a>
+                    </div>
+                    <div class="external-links">
+                        <a href="https://x.com/TravaFun" target="_blank">X.com</a>
+                        <a href="https://pump.fun/" target="_blank">Pump.fun</a>
+                    </div>
+                </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- TODAY PAGE -->
+        <div id="todayPage" class="page-content active">
+            <div class="hero">
+                <h1>Daily Memecoin Runners 🚀</h1>
+                <p>Track the hottest memecoins that launched and mooned today</p>
+            </div>
+
+            <div class="date-display" id="dateDisplay"></div>
+
+            <!-- Trending Section -->
+            <div class="trending-section">
+                <div class="section-header">Today's Trending Coins</div>
+                <div class="section-controls">
+                    <div class="last-updated" id="trendingLastUpdated">Loading...</div>
+                    <div class="view-controls">
+                        <select class="sort-dropdown" id="trendingSortSelect" onchange="sortCoins('trending', this.value)">
+                            <option value="default">Sort by Default</option>
+                            <option value="name">Sort by Name</option>
+                            <option value="price">Sort by Price</option>
+                            <option value="change">Sort by 24h Change</option>
+                            <option value="volume">Sort by Volume</option>
+                            <option value="liquidity">Sort by Liquidity</option>
+                        </select>
+                        <div class="view-toggle">
+                            <button class="active" onclick="toggleView('trending', 'cards')">Cards</button>
+                            <button onclick="toggleView('trending', 'table')">Table</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="trendingContainer" class="coin-grid">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p style="margin-top: 20px; color: #9ca3af;">Loading trending coins...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Section -->
+            <div class="search-section">
+                <div class="section-header">Add Your Own Coins</div>
+                <p style="text-align: center; color: #9ca3af; margin-bottom: 30px;">
+                    Found a gem? Add it here to track its performance.
+                </p>
+                <div class="coin-controls">
+                    <input type="text" class="coin-input" id="coinAddressInput" placeholder="Enter coin address (e.g., solana:0x...)">
+                    <button class="add-coin-btn" onclick="addCoin()">Add Coin</button>
+                </div>
+                
+                <div class="section-controls">
+                    <div class="last-updated" id="userCoinsLastUpdated">No coins added</div>
+                    <div class="view-controls">
+                        <select class="sort-dropdown" id="userCoinsSortSelect" onchange="sortCoins('user', this.value)">
+                            <option value="default">Sort by Default</option>
+                            <option value="name">Sort by Name</option>
+                            <option value="price">Sort by Price</option>
+                            <option value="change">Sort by 24h Change</option>
+                            <option value="volume">Sort by Volume</option>
+                            <option value="liquidity">Sort by Liquidity</option>
+                        </select>
+                        <div class="view-toggle">
+                            <button class="active" onclick="toggleView('user', 'cards')">Cards</button>
+                            <button onclick="toggleView('user', 'table')">Table</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="userCoinsContainer" class="coin-grid">
+                    <div class="error-message" style="color: #9ca3af;">
+                        <p>No coins added yet. Add coin addresses above to start tracking!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- YESTERDAY PAGE -->
+<!-- YESTERDAY PAGE -->
+        <div id="yesterdayPage" class="page-content">
+            <div class="hero">
+                <h1>Yesterday's Market Pulse 📰</h1>
+                <p>The most influential tweets and breaking news from yesterday's crypto scene</p>
+            </div>
+
+            <div class="date-display" id="yesterdayDate"></div>
+
+            <!-- Tweet Section -->
+            <div class="updates-section">
+                <div class="section-header">📱 Influential Tweets</div>
+                <div class="section-controls">
+                    <div class="last-updated" id="tweetsLastUpdated">Manual updates</div>
+                    <div class="view-controls">
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-filter="all" onclick="filterContent('tweets', 'all')">All</button>
+                            <button class="filter-btn" data-filter="bullish" onclick="filterContent('tweets', 'bullish')">Bullish</button>
+                            <button class="filter-btn" data-filter="bearish" onclick="filterContent('tweets', 'bearish')">Bearish</button>
+                            <button class="filter-btn" data-filter="news" onclick="filterContent('tweets', 'news')">News</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="tweetsContainer" class="updates-grid">
+                    <!-- Tweets will be populated here -->
+                </div>
+            </div>
+
+            <!-- News Section -->
+            <div class="updates-section">
+                <div class="section-header">📈 Market News</div>
+                <div class="section-controls">
+                    <div class="last-updated" id="newsLastUpdated">Manual updates</div>
+                    <div class="view-controls">
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-filter="all" onclick="filterContent('news', 'all')">All</button>
+                            <button class="filter-btn" data-filter="defi" onclick="filterContent('news', 'defi')">DeFi</button>
+                            <button class="filter-btn" data-filter="exchange" onclick="filterContent('news', 'exchange')">Exchange</button>
+                            <button class="filter-btn" data-filter="regulation" onclick="filterContent('news', 'regulation')">Regulation</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="newsContainer" class="updates-grid">
+                    <!-- News will be populated here -->
+                </div>
+            </div>
+
+            <!-- Admin Panel (Hidden by default) -->
+            <div class="admin-section" id="adminPanel" style="display: none;">
+                <div class="section-header">🔧 Admin Panel</div>
+                
+                <!-- Add Tweet Form -->
+                <div class="admin-form">
+                    <h3>Add Tweet</h3>
+                    <form id="tweetForm">
+                        <input type="text" id="tweetAuthor" placeholder="Author Handle (e.g., @elonmusk)" required>
+                        <input type="text" id="tweetAuthorName" placeholder="Author Name (e.g., Elon Musk)" required>
+                        <textarea id="tweetContent" placeholder="Tweet content..." required></textarea>
+                        <input type="url" id="tweetUrl" placeholder="Tweet URL" required>
+                        <select id="tweetCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="bullish">Bullish</option>
+                            <option value="bearish">Bearish</option>
+                            <option value="news">News</option>
+                        </select>
+                        <input type="number" id="tweetLikes" placeholder="Likes count" min="0">
+                        <input type="number" id="tweetRetweets" placeholder="Retweets count" min="0">
+                        <button type="submit">Add Tweet</button>
+                    </form>
+                </div>
+
+                <!-- Add News Form -->
+                <div class="admin-form">
+                    <h3>Add News</h3>
+                    <form id="newsForm">
+                        <input type="text" id="newsTitle" placeholder="News title..." required>
+                        <textarea id="newsContent" placeholder="News content/summary..." required></textarea>
+                        <input type="text" id="newsSource" placeholder="Source (e.g., CoinDesk)" required>
+                        <input type="url" id="newsUrl" placeholder="News URL" required>
+                        <select id="newsCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="defi">DeFi</option>
+                            <option value="exchange">Exchange</option>
+                            <option value="regulation">Regulation</option>
+                        </select>
+                        <input type="datetime-local" id="newsTime" required>
+                        <button type="submit">Add News</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- CURRENT METAS PAGE -->
+        <div id="metasPage" class="page-content">
+            <div class="hero">
+                <h1>Current Market Metas 🎯</h1>
+                <p>The trending narratives and themes dominating crypto right now</p>
+            </div>
+
+            <div class="date-display" id="metasDate"></div>
+
+            <div class="metas-section">
+                <div class="section-header">🔥 Current Metas</div>
+                <div class="metas-grid">
+                    <!-- Meta 1 - Edit this section -->
+                    <div class="meta-card">
+                        <div class="meta-header">
+                            <div class="meta-icon"></div>
+                            <div class="meta-title">X Community Coins</div>
+                        </div>
+                        <div class="meta-explanation">
+                            <p>Strong community backed tokens, especially on X.com.</p>
+                        </div>
+                        <div class="meta-tags">
+                            <span class="meta-tag">Autonomous</span>
+                            <span class="meta-tag">Viral</span>
+                            <span class="meta-tag">Community</span>
+                        </div>
+                    </div>
+
+                    <!-- Meta 2 - Edit this section -->
+                    <div class="meta-card">
+                        <div class="meta-header">
+                            <div class="meta-icon"></div>
+                            <div class="meta-title">Launch Coin</div>
+                        </div>
+                        <div class="meta-explanation">
+                            <p>Recently, the meta was dominated by "Launch a Coin" projects — tokens launched with slick UIs and claims of real development. These attracted quick hype and speculative pumps. This meta is however on its way out.</p>
+                        </div>
+                        <div class="meta-tags">
+                            <span class="meta-tag">Innovative</span>
+                            <span class="meta-tag">New</span>
+                            <span class="meta-tag">Viral</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROADMAP/COMING SOON PAGE -->
+        <!-- ROADMAP/COMING SOON PAGE -->
+        <div id="roadmapPage" class="page-content">
+            <div class="hero">
+                <h1>What's Coming Next 🛣️</h1>
+                <p>Our roadmap for making TRAVA the ultimate crypto tracking experience</p>
+            </div>
+
+            <div class="roadmap-container">
+                <!-- Current Status -->
+                <div class="roadmap-section">
+                    <div class="section-header">✅ Recently Shipped</div>
+                    <div class="milestone-grid">
+                        <div class="milestone-card completed">
+                            <div class="milestone-header">
+                                <div class="milestone-icon">🚀</div>
+                                <div class="milestone-info">
+                                    <h3>Daily Coin Tracking</h3>
+                                    <span class="milestone-status completed">Completed</span>
+                                </div>
+                            </div>
+                            <p>Real-time tracking of trending memecoins with DexScreener integration</p>
+                        </div>
+
+                        <div class="milestone-card completed">
+                            <div class="milestone-header">
+                                <div class="milestone-icon">📱</div>
+                                <div class="milestone-info">
+                                    <h3>Yesterday's Updates</h3>
+                                    <span class="milestone-status completed">Completed</span>
+                                </div>
+                            </div>
+                            <p>Curated crypto tweets and news from influential voices in the space</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- In Progress -->
+                <div class="roadmap-section">
+                    <div class="section-header">🔄 In Progress</div>
+                    <div class="milestone-grid">
+                        <div class="milestone-card in-progress">
+                            <div class="milestone-header">
+                                <div class="milestone-icon">📊</div>
+                                <div class="milestone-info">
+                                    <h3>Advanced Analytics</h3>
+                                    <span class="milestone-status in-progress">In Development</span>
+                                </div>
+                            </div>
+                            <p>Price charts, volume analysis, and liquidity trends for better decision making</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%"></div>
+                            </div>
+                            <span class="progress-text">65% Complete</span>
+                        </div>
+
+                        <div class="milestone-card in-progress">
+                            <div class="milestone-header">
+                                <div class="milestone-icon">🔔</div>
+                                <div class="milestone-info">
+                                    <h3>Price Alerts</h3>
+                                    <span class="milestone-status in-progress">In Development</span>
+                                </div>
+                            </div>
+                            <p>Set custom alerts for price movements, volume spikes, and trending coins</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 40%"></div>
+                            </div>
+                            <span class="progress-text">40% Complete</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coming Soon -->
+                <div class="roadmap-section">
+                    <div class="section-header">🔮 Coming Soon</div>
+                    <div class="milestone-grid">
+                        <div class="milestone-card upcoming">
+                            <div class="milestone-header">
+                                <div class="milestone-icon">💎</div>
+                                <div class="milestone-info">
+                                    <h3>Gem Score Algorithm</h3>
+                                    <span class="milestone-status upcoming">Q2 2025</span>
+                                </div>
+                            </div>
+                            <p>AI-powered scoring system to identify potential moonshots before they pump</p>
+                        </div>
+
+                        <div class="milestone-card upcoming">
+                            <div class="milestone-header">
+                                <div class="milestone-icon">🤖</div>
+                                <div class="milestone-info">
+                                    <h3>Telegram Bot</h3>
+                                    <span class="milestone-status upcoming">Q2 2025</span>
+                                </div>
+                            </div>
+                            <p>Get instant notifications and track coins directly from Telegram</p>
+                        </div>
+
+                        <div class="milestone-card upcoming">
+                            <div class="milestone-header">
+                                <div class="milestone-icon">📈</div>
+                                <div class="milestone-info">
+                                    <h3>Portfolio Tracker</h3>
+                                    <span class="milestone-status upcoming">Q2 2025</span>
+                                </div>
+                            </div>
+                            <p>Track your holdings, P&L, and performance across multiple wallets</p>
+                        </div>
+
+                        <div class="milestone-card upcoming">
+                            <div class="milestone-header">
+                                <div class="milestone-icon">🌐</div>
+                                <div class="milestone-info">
+                                    <h3>Multi-Chain Support</h3>
+                                    <span class="milestone-status upcoming">Q3 2025</span>
+                                </div>
+                            </div>
+                            <p>Expand beyond Solana to Ethereum, Base, and other popular chains</p>
+                        </div>
+
+                        <div class="milestone-card upcoming">
+                            <div class="milestone-header">
+                                <div class="milestone-icon">👥</div>
+                                <div class="milestone-info">
+                                    <h3>Social Features</h3>
+                                    <span class="milestone-status upcoming">Q3 2025</span>
+                                </div>
+                            </div>
+                            <p>Follow other traders, share watchlists, and see what the community is buying</p>
+                        </div>
+
+                        <div class="milestone-card upcoming">
+                            <div class="milestone-header">
+                                <div class="milestone-icon">📱</div>
+                                <div class="milestone-info">
+                                    <h3>Mobile App</h3>
+                                    <span class="milestone-status upcoming">Q3 2025</span>
+                                </div>
+                            </div>
+                            <p>Native iOS and Android apps for tracking on the go</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Long Term Vision -->
+                <div class="roadmap-section">
+                    <div class="section-header">🚀 Long Term Vision</div>
+                    <div class="vision-card">
+                        <div class="vision-content">
+                            <h3>The Future of TRAVA</h3>
+                            <p>Our mission is to become the go-to platform for crypto traders who want to discover the next big opportunities before they explode. We're building the tools, data, and community features that will help you stay ahead of the curve in the fast-moving world of memecoins and emerging crypto projects.</p>
+                            
+                            <div class="vision-stats">
+                                <div class="vision-stat">
+                                    <div class="stat-number">10,000+</div>
+                                    <div class="stat-label">Active Users Goal</div>
+                                </div>
+                                <div class="vision-stat">
+                                    <div class="stat-number">50+</div>
+                                    <div class="stat-label">Supported Chains</div>
+                                </div>
+                                <div class="vision-stat">
+                                    <div class="stat-number">24/7</div>
+                                    <div class="stat-label">Real-time Updates</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback Section -->
+                <div class="feedback-section">
+                    <div class="section-header">💬 Have Ideas?</div>
+                    <div class="feedback-card">
+                        <h3>Help Shape TRAVA's Future</h3>
+                        <p>Got feature requests or ideas? We'd love to hear from you! Your feedback helps us prioritize what to build next.</p>
+                        <div class="feedback-actions">
+                            <a href="https://x.com/TravaFun" target="_blank" class="feedback-btn primary">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                </svg>
+                                Tweet at Us
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 TRAVA - <span id="footerPageName">Daily Memecoin Runners</span></p>
+        <button onclick="toggleAdmin()" style="background: none; border: none; color: #666; font-size: 12px; margin-top: 10px; cursor: pointer;">Admin</button>
+    </footer>
+
+    <!-- Share Modal -->
+    <div class="modal-overlay" id="shareModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeShareModal()">×</button>
+            <h3 style="color: #ffffff; margin-bottom: 20px; text-align: center;">Share This Gem 💎</h3>
+            <canvas id="shareCanvas" width="800" height="418"></canvas>
+            <div class="share-actions">
+                <button class="download-btn" onclick="downloadShareCard()">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"/>
+                    </svg>
+                    Download
+                </button>
+                <a href="#" class="share-btn" id="twitterShareBtn" target="_blank">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                    Share on X
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="yesterday.js"></script>
+    <script src="metas.js"></script>
+
+</body>
+</html>
