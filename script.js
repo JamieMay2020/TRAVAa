@@ -882,7 +882,7 @@ function generateShareCard() {
     // Website URL
     ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
     ctx.fillStyle = '#8b5cf6';
-    ctx.fillText('trava.io', 250, 370);
+    ctx.fillText('trava.fun', 250, 370);
 
     // Chain name
     ctx.font = '14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
